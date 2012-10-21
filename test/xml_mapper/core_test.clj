@@ -1,11 +1,10 @@
 (ns xml-mapper.core-test
-  (:import [java.io ByteArrayInputStream])
+  (:import [java.io StringReader])
   (:use clojure.test
-        xml-mapper.core
-        clojure.xml))
+        xml-mapper.core))
 
 (defn- parse-and-convert [xml-text]
-  (xml-to-raw (parse (-> xml-text .getBytes ByteArrayInputStream.))))
+  (xml-to-raw (StringReader. xml-text)))
   
 (defn- check [expected xml-text]
   (is (= expected (parse-and-convert xml-text))))
@@ -113,3 +112,11 @@
                  <inner>val8</inner>
              </key2>
           </root>"))
+
+(deftest namespace-removal
+    (check {:root 
+          {:key ["attrVal","elemVal"]}} 
+         
+         "<n:root xmlns:n=\"http://namespace1\" xmlns:m=\"http://namespace2\" key=\"attrVal\">
+             <m:key>elemVal</m:key>
+          </n:root>"))

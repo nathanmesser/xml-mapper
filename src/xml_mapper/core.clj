@@ -8,8 +8,7 @@ Inspired by Approach #3 here http://www.w3.org/2011/10/integration-workshop/s/Ex
 
 This is NOT intended to be able to round trip."}
      
-     xml-mapper.core
-  (:require [clojure.xml :as xml]))
+     xml-mapper.core)
 
 (defn- contains-one-string 
   "check if item is a vector containing a single string"
@@ -25,6 +24,8 @@ This is NOT intended to be able to round trip."}
       (not attrs)        children
       (string? children) (merge-with (comp vec flatten vector) attrs {:text-content children})
       :else              (merge-with (comp vec flatten vector) attrs children)))
+
+(declare xml-to-raw)
 
 (defn- convert-element
   "converts a single element to a map of it's tag name to it's contents"
